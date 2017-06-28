@@ -20,12 +20,14 @@ def Key_Stats(gather="Total Debt/Equity (mrq)"):
                 unix_time = time.mktime(date_stamp.timetuple())
                 #print(date_stamp, unix_time)
                 full_file_path = each_dir+'/'+file
-                #print(full_file_path)
+                #save full source code HTML to "source" variable.
                 source = open(full_file_path,'r').read()
                 #print(source)
+                #split by the opening of the table data tag and the table data closing tag to find the value we're hunting for.
                 value = source.split(gather+':</td><td class="yfnc_tabledata1">')[1].split('</td>')[0]
+                #output value
                 print(ticker+":",value)
-        time.sleep(45)
+        time.sleep(15)
 
 
 
