@@ -3,6 +3,14 @@ import os
 import time
 from datetime import datetime
 
+from time import mktime
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib import style
+style.use("dark_background")
+
+import re
+
 path = "/Users/richardsaville/documents/LifeIQ/intraQuarter"
 
 def Key_Stats(gather="Total Debt/Equity (mrq)"):
@@ -16,14 +24,15 @@ def Key_Stats(gather="Total Debt/Equity (mrq)"):
                                  'Price',
                                  'stock_p_change',
                                  'SP500',
-                                 'sp500_p_change'])
+                                 'sp500_p_change',
+                                 'Difference'])
     #print(stock_list)
     #get SP500 data from csv file.
     sp500_df = pd.DataFrame.from_csv("SP500data.csv")
 
     ticker_list = []
 
-    for each_dir in stock_list[1:3]:
+    for each_dir in stock_list[1:10]:
         each_file = os.listdir(each_dir)
         ticker = each_dir.split("_KeyStats/")[1]
         ticker_list.append(ticker)
@@ -76,9 +85,23 @@ def Key_Stats(gather="Total Debt/Equity (mrq)"):
                                     'Price':stock_price,
                                     'stock_p_change':stock_p_change,
                                     'SP500':sp500_value,
-                                    'sp500_p_change':sp500_p_change}, ignore_index = True)
+                                    'sp500_p_change':sp500_p_change,
+                                    'Difference':stock_p_change-sp500_p_change}, ignore_index = True)
                 except Exception as e:
                     pass
+    
+    for each_ticker in ticker_list:
+        try:
+            plot_df = df[(df['Ticker'] == each_ticker)]
+            plot_df = plot_df.set_index(['Date'])
+
+            plot_df['Difference'].plot(label=each_ticker)
+            plt.legend()
+
+        except:
+            pass
+    
+    plt.show()
 
     #specifying a custom name for the csv file, then using pandas to_csv capability to output the Data Frame to an actual CSV file.
     save = gather.replace(' ','').replace(')','').replace('(','').replace('/','')+('.csv')
