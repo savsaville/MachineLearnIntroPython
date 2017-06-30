@@ -33,7 +33,7 @@ def Key_Stats(gather="Total Debt/Equity (mrq)"):
     #get SP500 data from csv file.
     sp500_df = pd.DataFrame.from_csv("SP500data.csv")
 
-    for each_dir in stock_list[1:25]:
+    for each_dir in stock_list[1:10]:
         each_file = os.listdir(each_dir)
         ticker = each_dir.split("_KeyStats/")[1]
         ticker_list.append(ticker)
